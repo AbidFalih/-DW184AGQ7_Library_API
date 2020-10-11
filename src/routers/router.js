@@ -2,7 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
-const { readUser, createUser, deleteUser } = require("../controllers/user");
+const { register, login } = require("../controllers/auth");
+
+const { readUser, deleteUser } = require("../controllers/user");
 
 const {
   readCategory,
@@ -20,20 +22,24 @@ const {
   deleteBook,
 } = require("../controllers/book");
 
+const { auth } = require("../middlewares/middleware");
+
+router.post("/register", register);
+router.post("/login", login);
+
 router.get("/users", readUser);
-router.post("/register", createUser);
 router.delete("/user/:id", deleteUser);
 
 router.get("/category", readCategory);
 router.get("/category/:id", detailCategory);
-router.post("/category", createCategory);
-router.patch("/category/:id", updateCategory);
-router.delete("/category/:id", deleteCategory);
+router.post("/category", auth, createCategory);
+router.patch("/category/:id", auth, updateCategory);
+router.delete("/category/:id", auth, deleteCategory);
 
 router.get("/books", readBook);
 router.get("/book/:id", detailBook);
-router.post("/book", createBook);
-router.patch("/book/:id", updateBook);
-router.delete("/book/:id", deleteBook);
+router.post("/book", auth, createBook);
+router.patch("/book/:id", auth, updateBook);
+router.delete("/book/:id", auth, deleteBook);
 
 module.exports = router;

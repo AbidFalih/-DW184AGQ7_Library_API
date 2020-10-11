@@ -1,18 +1,18 @@
 const { User } = require("../../models");
 const { showError } = require("./_showError");
 
-exports.createUser = async (req, res) => {
-  try {
-    const addUser = await User.create(req.body);
+// exports.createUser = async (req, res) => {
+//   try {
+//     const addUser = await User.create(req.body);
 
-    res.send({
-      message: "Successfully create a User",
-      data: { addUser },
-    });
-  } catch (err) {
-    showError(err);
-  }
-};
+//     res.send({
+//       message: "Successfully create a User",
+//       data: { addUser },
+//     });
+//   } catch (err) {
+//     showError(err);
+//   }
+// };
 
 exports.readUser = async (req, res) => {
   try {
