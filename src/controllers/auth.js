@@ -3,6 +3,7 @@ const Joi = require("@hapi/joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { showError } = require("./_showError");
+require("dotenv").config();
 
 exports.register = async (req, res) => {
   try {
@@ -11,6 +12,7 @@ exports.register = async (req, res) => {
       fullName: Joi.string().min(3).required(),
       email: Joi.string().email().required(),
       password: Joi.string().min(8).required(),
+      gender: Joi.bool(),
       phone: Joi.string().min(8).required(),
       address: Joi.string().min(8).required(),
     });
@@ -25,12 +27,12 @@ exports.register = async (req, res) => {
       });
 
     //saving
-    const { password } = req.body;
+    const { email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10); //10->saltRound
 
     const user = await User.create({ ...req.body, password: hashedPassword });
 
-    const token = jwt.sign({ id: user.id }, "abidfalih");
+    const token = await jwt.sign({ id: user.id }, process.env.JWT_KEY);
 
     //send
     res.send({
@@ -54,7 +56,7 @@ exports.login = async (req, res) => {
     if (!validPass)
       return res.status(400).send({ message: "Invalid Login (pass)" });
 
-    const token = jwt.sign({ id: user.id }, "abidfalih");
+    const token = jwt.sign({ id: user.id }, process.env.JWT_KEY);
 
     res.send({
       message: "Login Success!",

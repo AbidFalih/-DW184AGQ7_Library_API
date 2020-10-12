@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { showError } = require("../controllers/_showError");
+require("dotenv").config();
 
 exports.auth = (req, res, next) => {
   let header, token;
@@ -12,8 +13,9 @@ exports.auth = (req, res, next) => {
     return res.status(400).send({ message: "Access denied!" });
 
   try {
-    const verified = jwt.verify(token, "abidfalih");
+    const verified = jwt.verify(token, process.env.JWT_KEY);
     req.user = verified;
+    next();
   } catch (err) {
     showError(err);
   }

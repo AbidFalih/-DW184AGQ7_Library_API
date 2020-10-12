@@ -33,7 +33,7 @@ exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deleted = User.destroy({
+    await User.destroy({
       where: { id },
     });
 
