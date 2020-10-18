@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { register, login } = require("../controllers/auth");
+const { register, login, checkAuth } = require("../controllers/auth");
 
 const { readUser, deleteUser } = require("../controllers/user");
 
@@ -26,11 +26,12 @@ const { auth } = require("../middlewares/middleware");
 
 router.post("/register", register);
 router.post("/login", login);
+router.get("/auth", auth, checkAuth);
 
 router.get("/users", readUser);
 router.delete("/user/:id", deleteUser);
 
-router.get("/category", readCategory);
+router.get("/categories", readCategory);
 router.get("/category/:id", detailCategory);
 router.post("/category", auth, createCategory);
 router.patch("/category/:id", auth, updateCategory);

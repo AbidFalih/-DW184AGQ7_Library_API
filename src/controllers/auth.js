@@ -5,6 +5,26 @@ const jwt = require("jsonwebtoken");
 const { showError } = require("./_showError");
 require("dotenv").config();
 
+exports.checkAuth = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "password"],
+      },
+    });
+
+    res.send({
+      message: "User Valid",
+      user,
+    });
+  } catch (err) {
+    showError(err);
+  }
+};
+
 exports.register = async (req, res) => {
   try {
     //validate
@@ -58,11 +78,13 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_KEY);
 
+    const isAdmin = user.isAdmin;
     res.send({
       message: "Login Success!",
       data: {
         email,
         token,
+        isAdmin,
       },
     });
   } catch (err) {
