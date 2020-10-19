@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Book, {
         as: "books",
       });
+
+      User.belongsToMany(models.Book, {
+        as: "bookmarkedBooks",
+        through: {
+          model: "Bookmarks",
+          as: "bookmark",
+        },
+      });
     }
   }
   User.init(
@@ -22,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       address: DataTypes.STRING,
       isAdmin: DataTypes.BOOLEAN,
+      thumb: DataTypes.STRING,
     },
     {
       sequelize,

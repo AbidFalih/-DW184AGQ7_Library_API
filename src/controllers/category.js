@@ -9,7 +9,7 @@ exports.readCategory = async (req, res) => {
 
     res.send({
       message: "Successfully get categories",
-      data: { categories },
+      categories,
     });
   } catch (err) {
     showError(err);
@@ -26,7 +26,7 @@ exports.detailCategory = async (req, res) => {
 
     res.send({
       message: `Successfully get Category with id ${id}`,
-      data: { detailCategory },
+      detailCategory,
     });
   } catch (err) {
     showError(err);

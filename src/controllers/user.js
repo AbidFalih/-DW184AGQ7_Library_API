@@ -17,12 +17,50 @@ const { showError } = require("./_showError");
 exports.readUser = async (req, res) => {
   try {
     const users = await User.findAll({
-      attributes: { exclude: ["gender", "createdAt", "updatedAt"] },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
     });
 
     res.send({
       message: "Success retrieve data users",
       data: { users },
+    });
+  } catch (err) {
+    showError(err);
+  }
+};
+
+exports.detailUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({
+      where: { id },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    res.send({
+      message: "Success retrieve a user",
+      user,
+    });
+  } catch (err) {
+    showError(err);
+  }
+};
+
+exports.editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.update(req.body, {
+      where: { id },
+    });
+
+    const user = await User.findOne({
+      where: { id },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    res.send({
+      message: "Successfully update a user",
+      user,
     });
   } catch (err) {
     showError(err);

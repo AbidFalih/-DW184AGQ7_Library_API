@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Book extends Model {
     /**
@@ -13,31 +11,43 @@ module.exports = (sequelize, DataTypes) => {
       Book.belongsTo(models.Category, {
         as: "category",
         foreignKey: {
-          id: "categoryId"
-        }
-      })
+          id: "categoryId",
+        },
+      });
 
       Book.belongsTo(models.User, {
         as: "user",
         foreignKey: {
-          id: "userId"
-        }
-      })
+          id: "userId",
+        },
+      });
+
+      Book.belongsToMany(models.User, {
+        as: "bookmarkedUsers",
+        through: {
+          model: "Bookmarks",
+          as: "bookmark",
+        },
+      });
     }
-  };
-  Book.init({
-    title: DataTypes.STRING,
-    publication: DataTypes.STRING,
-    categoryId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER,
-    pages: DataTypes.INTEGER,
-    isbn: DataTypes.STRING,
-    aboutBook: DataTypes.STRING,
-    file: DataTypes.STRING,
-    status: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Book',
-  });
+  }
+  Book.init(
+    {
+      title: DataTypes.STRING,
+      thumb: DataTypes.STRING,
+      publication: DataTypes.STRING,
+      categoryId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
+      pages: DataTypes.INTEGER,
+      isbn: DataTypes.STRING,
+      aboutBook: DataTypes.STRING,
+      file: DataTypes.STRING,
+      status: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "Book",
+    }
+  );
   return Book;
 };
